@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Youth Mental Wellness Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .active-nav {
+            color: #4f46e5; /* indigo-600 */
+            border-top-color: #4f46e5;
+        }
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+        }
+        /* Custom scrollbar for chat */
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+        .chat-messages::-webkit-scrollbar-track {
+            background-color: #f1f5f9;
+        }
+        /* Animation for modals */
+        .modal-enter {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .modal-leave {
+            animation: fadeOut 0.3s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <div id="app-container" class="max-w-md mx-auto h-screen bg-white flex flex-col shadow-2xl">
+        <!-- Header -->
+        <header class="p-4 border-b border-slate-200">
+            <h1 class="text-xl font-bold text-slate-800">MindWell</h1>
+            <p class="text-sm text-slate-500">Your safe space to feel better.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow overflow-y-auto p-4 md:p-6 space-y-6 bg-slate-50/50">
+
+            <!-- Screen 1: AI Bot / Home -->
+            <div id="home-screen" class="screen active">
+                <div class="text-center bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                    <img src="https://avatar.iran.liara.run/public/3" alt="Friendly AI Avatar" class="w-24 h-24 mx-auto rounded-full shadow-lg -mt-16 border-4 border-white">
+                    <h2 class="text-lg font-semibold text-slate-800 mt-4">Hi, I'm Spark!</h2>
+                    <p class="text-slate-600 mt-1">Your personal wellbeing guide. I'm here to listen, offer support, or connect you with helpful tools. How can I help you today?</p>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 gap-4">
+                    <button id="start-chat-btn" class="w-full flex items-center justify-center gap-3 bg-indigo-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105">
+                        <i data-lucide="message-circle"></i>
+                        Start a Chat
+                    </button>
+                    <button id="start-call-btn" class="w-full flex items-center justify-center gap-3 bg-slate-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:bg-slate-800 transition-all duration-300 transform hover:scale-105">
+                        <i data-lucide="phone"></i>
+                        Simulate a Voice Call
+                    </button>
+                </div>
+                 <div class="mt-6 text-center bg-green-50 p-6 rounded-2xl border border-green-100">
+                    <h3 class="text-lg font-semibold text-green-800">Quick Tools</h3>
+                    <p class="text-green-700 mt-1 mb-4">Need a quick reset? Try one of these.</p>
+                    <div class="flex justify-center gap-4">
+                        <button class="flex-1 bg-white p-3 rounded-lg shadow-sm border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+                            <i data-lucide="wind" class="mx-auto"></i>
+                            <span class="text-xs mt-1 block">Breathe</span>
+                        </button>
+                        <button class="flex-1 bg-white p-3 rounded-lg shadow-sm border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+                            <i data-lucide="ear" class="mx-auto"></i>
+                            <span class="text-xs mt-1 block">Listen</span>
+                        </button>
+                         <button class="flex-1 bg-white p-3 rounded-lg shadow-sm border border-slate-200 text-slate-700 hover:bg-slate-100 transition">
+                            <i data-lucide="anchor" class="mx-auto"></i>
+                            <span class="text-xs mt-1 block">Grounding</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: Anonymous Peer Rooms -->
+            <div id="rooms-screen" class="screen">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Peer Rooms</h2>
+                    <button class="text-sm bg-indigo-100 text-indigo-700 font-semibold px-3 py-1 rounded-full">+ Create Room</button>
+                </div>
+                <p class="text-slate-600 mb-4 text-sm">Join a conversation with others who get it. It's 100% anonymous.</p>
+                <div class="space-y-4">
+                    <!-- Room Card 1 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="font-semibold text-slate-800">Navigating School Stress</h3>
+                                <p class="text-xs text-slate-500 mt-1">A place to share and cope with academic pressure.</p>
+                            </div>
+                            <div class="flex -space-x-2 relative">
+                                <img class="w-6 h-6 rounded-full border-2 border-white" src="https://avatar.iran.liara.run/public/12" alt="avatar">
+                                <img class="w-6 h-6 rounded-full border-2 border-white" src="https://avatar.iran.liara.run/public/45" alt="avatar">
+                                <span class="w-6 h-6 rounded-full border-2 border-white bg-slate-200 text-slate-600 text-xs flex items-center justify-center">+5</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2">
+                            <button class="flex-1 text-sm bg-slate-100 text-slate-700 py-2 rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-1.5"><i data-lucide="message-square-text" class="w-4 h-4"></i> Text</button>
+                            <button class="flex-1 text-sm bg-slate-100 text-slate-700 py-2 rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-1.5"><i data-lucide="mic" class="w-4 h-4"></i> Voice</button>
+                            <button class="flex-1 text-sm bg-slate-100 text-slate-700 py-2 rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-1.5"><i data-lucide="video" class="w-4 h-4"></i> Video</button>
+                        </div>
+                    </div>
+                    <!-- Room Card 2 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="font-semibold text-slate-800">Celebrating Small Wins</h3>
+                         <p class="text-xs text-slate-500 mt-1">Share something positive, no matter how small.</p>
+                        <div class="mt-4 flex items-center gap-2">
+                            <button class="flex-1 text-sm bg-emerald-500 text-white py-2 rounded-lg hover:bg-emerald-600 transition flex items-center justify-center gap-1.5"><i data-lucide="message-square-text" class="w-4 h-4"></i> Join Text Chat</button>
+                        </div>
+                    </div>
+                     <!-- Room Card 3 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="font-semibold text-slate-800">Just Feeling... Meh</h3>
+                                <p class="text-xs text-slate-500 mt-1">A quiet room for when you don't feel like talking much.</p>
+                            </div>
+                            <div class="flex -space-x-2 relative">
+                                <img class="w-6 h-6 rounded-full border-2 border-white" src="https://avatar.iran.liara.run/public/81" alt="avatar">
+                                <img class="w-6 h-6 rounded-full border-2 border-white" src="https://avatar.iran.liara.run/public/92" alt="avatar">
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2">
+                             <button class="flex-1 text-sm bg-slate-100 text-slate-700 py-2 rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-1.5"><i data-lucide="mic" class="w-4 h-4"></i> Voice Only</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 3: Digital Journal -->
+            <div id="journal-screen" class="screen">
+                <div id="journal-entry-mode">
+                    <h2 class="text-lg font-bold text-slate-800">New Journal Entry</h2>
+                    <p class="text-slate-600 mb-4 text-sm">How are you feeling right now? Write it out.</p>
+
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                        <textarea id="journal-text" class="w-full h-32 p-2 border-0 rounded-lg focus:ring-2 focus:ring-indigo-400 transition bg-slate-50" placeholder="Let your thoughts flow..."></textarea>
+                        
+                        <div class="mt-4">
+                            <h4 class="text-sm font-medium text-slate-700 mb-2">Track your mood:</h4>
+                            <div id="mood-tracker" class="flex justify-around">
+                                <button class="mood-btn text-4xl p-2 rounded-full transition transform hover:scale-125" data-mood="Happy">😊</button>
+                                <button class="mood-btn text-4xl p-2 rounded-full transition transform hover:scale-125" data-mood="Okay">😐</button>
+                                <button class="mood-btn text-4xl p-2 rounded-full transition transform hover:scale-125" data-mood="Sad">😢</button>
+                                <button class="mood-btn text-4xl p-2 rounded-full transition transform hover:scale-125" data-mood="Anxious">😟</button>
+                                <button class="mood-btn text-4xl p-2 rounded-full transition transform hover:scale-125" data-mood="Angry">😠</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="save-journal-btn" class="mt-6 w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:bg-indigo-700 transition disabled:bg-indigo-300 disabled:cursor-not-allowed">
+                        Save & Analyze
+                    </button>
+                </div>
+
+                <div id="journal-analysis-mode" class="hidden">
+                    <h2 class="text-lg font-bold text-slate-800">Your Reflection</h2>
+                    <p class="text-slate-600 mb-4 text-sm">Here are some gentle observations based on your entry.</p>
+
+                    <div id="analysis-content" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <!-- AI analysis will be injected here -->
+                    </div>
+                    
+                    <button id="new-entry-btn" class="mt-6 w-full bg-slate-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:bg-slate-800 transition">
+                        Write a New Entry
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="grid grid-cols-3 text-center border-t border-slate-200 bg-white">
+            <button class="nav-btn p-3 text-slate-500 border-t-2 border-transparent active-nav" data-target="home-screen">
+                <i data-lucide="bot" class="mx-auto w-6 h-6"></i>
+                <span class="text-xs font-medium">Support</span>
+            </button>
+            <button class="nav-btn p-3 text-slate-500 border-t-2 border-transparent" data-target="rooms-screen">
+                <i data-lucide="users" class="mx-auto w-6 h-6"></i>
+                <span class="text-xs font-medium">Peer Rooms</span>
+            </button>
+            <button class="nav-btn p-3 text-slate-500 border-t-2 border-transparent" data-target="journal-screen">
+                <i data-lucide="book-heart" class="mx-auto w-6 h-6"></i>
+                <span class="text-xs font-medium">Journal</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- AI Chat Modal -->
+    <div id="chat-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden modal-enter">
+        <div class="bg-white w-full max-w-md h-[90vh] max-h-[700px] rounded-2xl shadow-xl flex flex-col">
+            <header class="p-4 border-b flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="https://avatar.iran.liara.run/public/3" alt="AI Avatar" class="w-10 h-10 rounded-full">
+                    <div>
+                        <h3 class="font-semibold">Spark</h3>
+                        <p class="text-xs text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Online</p>
+                    </div>
+                </div>
+                <button id="close-chat-btn" class="text-slate-500 hover:text-slate-800"><i data-lucide="x"></i></button>
+            </header>
+            <div class="flex-grow p-4 overflow-y-auto chat-messages space-y-4">
+                <!-- Chat messages will be appended here -->
+            </div>
+            <footer class="p-4 border-t bg-slate-50">
+                 <div id="chat-quick-replies" class="flex flex-wrap gap-2 mb-2">
+                     <!-- Quick replies will be appended here -->
+                 </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- AI Call Modal -->
+    <div id="call-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden modal-enter">
+        <div class="bg-slate-800 text-white w-full max-w-md h-auto p-8 rounded-2xl shadow-xl flex flex-col items-center text-center">
+             <img src="https://avatar.iran.liara.run/public/3" alt="AI Avatar" class="w-24 h-24 rounded-full shadow-lg border-4 border-slate-600">
+             <h3 class="font-semibold text-2xl mt-4">Connecting to Spark...</h3>
+             <p id="call-status" class="text-slate-400 mt-1">Simulating a secure voice connection.</p>
+             <div class="my-8 flex items-center justify-center gap-2 text-slate-300">
+                <div class="w-2 h-2 bg-slate-300 rounded-full animate-pulse delay-0"></div>
+                <div class="w-2 h-2 bg-slate-300 rounded-full animate-pulse delay-200"></div>
+                <div class="w-2 h-2 bg-slate-300 rounded-full animate-pulse delay-400"></div>
+             </div>
+             <button id="end-call-btn" class="w-2/3 bg-red-600 font-semibold py-3 px-4 rounded-xl shadow-md hover:bg-red-700 transition flex items-center justify-center gap-2">
+                <i data-lucide="phone-off"></i> End Call
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const screens = document.querySelectorAll('.screen');
+
+            // --- Navigation Logic ---
+            const switchScreen = (targetId) => {
+                screens.forEach(screen => {
+                    screen.classList.toggle('active', screen.id === targetId);
+                });
+                navButtons.forEach(btn => {
+                    btn.classList.toggle('active-nav', btn.dataset.target === targetId);
+                });
+            };
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switchScreen(button.dataset.target);
+                });
+            });
+
+            // --- AI Bot Chat & Call Logic ---
+            const chatModal = document.getElementById('chat-modal');
+            const callModal = document.getElementById('call-modal');
+            const startChatBtn = document.getElementById('start-chat-btn');
+            const closeChatBtn = document.getElementById('close-chat-btn');
+            const startCallBtn = document.getElementById('start-call-btn');
+            const endCallBtn = document.getElementById('end-call-btn');
+            const chatMessagesContainer = chatModal.querySelector('.chat-messages');
+            const chatQuickRepliesContainer = document.getElementById('chat-quick-replies');
+
+            const toggleModal = (modal, show) => {
+                 if (show) {
+                    modal.classList.remove('hidden');
+                    modal.classList.remove('modal-leave');
+                    modal.classList.add('modal-enter');
+                } else {
+                    modal.classList.remove('modal-enter');
+                    modal.classList.add('modal-leave');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                }
+            };
+            
+            startChatBtn.addEventListener('click', () => {
+                 toggleModal(chatModal, true);
+                 startChat();
+            });
+            closeChatBtn.addEventListener('click', () => toggleModal(chatModal, false));
+            
+            startCallBtn.addEventListener('click', () => {
+                toggleModal(callModal, true);
+                setTimeout(() => {
+                    document.getElementById('call-status').textContent = 'Connected. How can I help? (This is a simulation)';
+                }, 2000);
+            });
+            endCallBtn.addEventListener('click', () => toggleModal(callModal, false));
+            
+            const createMessageElement = (text, sender) => {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = `flex gap-2 ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+
+                const messageBubble = document.createElement('div');
+                messageBubble.textContent = text;
+                messageBubble.className = `max-w-[80%] p-3 rounded-2xl ${sender === 'user' ? 'bg-indigo-600 text-white rounded-br-lg' : 'bg-slate-200 text-slate-800 rounded-bl-lg'}`;
+
+                if (sender === 'ai') {
+                    const avatar = document.createElement('img');
+                    avatar.src = 'https://avatar.iran.liara.run/public/3';
+                    avatar.className = 'w-8 h-8 rounded-full self-end';
+                    messageWrapper.appendChild(avatar);
+                }
+                
+                messageWrapper.appendChild(messageBubble);
+                return messageWrapper;
+            };
+
+            const addMessage = (text, sender) => {
+                const messageEl = createMessageElement(text, sender);
+                chatMessagesContainer.appendChild(messageEl);
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            };
+
+            const showQuickReplies = (replies) => {
+                chatQuickRepliesContainer.innerHTML = '';
+                replies.forEach(reply => {
+                    const button = document.createElement('button');
+                    button.textContent = reply.text;
+                    button.className = 'px-3 py-1.5 text-sm bg-white border border-slate-300 text-indigo-700 rounded-full hover:bg-indigo-50 transition';
+                    button.onclick = () => {
+                        addMessage(reply.text, 'user');
+                        chatQuickRepliesContainer.innerHTML = '';
+                        setTimeout(() => reply.action(), 1000);
+                    };
+                    chatQuickRepliesContainer.appendChild(button);
+                });
+            };
+
+            const chatFlow = {
+                start: {
+                    message: "Hi! I'm Spark. Thanks for reaching out. What's on your mind today?",
+                    replies: [
+                        { text: "Just feeling a bit down.", action: () => handleFlow('feelingDown') },
+                        { text: "I need to vent.", action: () => handleFlow('needToVent') },
+                        { text: "Something good happened!", action: () => handleFlow('goodThing') },
+                    ]
+                },
+                feelingDown: {
+                    message: "I'm sorry to hear that. It's okay to feel down sometimes. Talking about it can help. Would you like to explore why, or would you prefer a distraction?",
+                    replies: [
+                        { text: "Let's explore it.", action: () => handleFlow('exploreFeelings') },
+                        { text: "Distract me, please.", action: () => handleFlow('distraction') },
+                    ]
+                },
+                needToVent: {
+                    message: "I'm here to listen. This is a safe space to let it all out. I won't judge.",
+                    replies: []
+                },
+                goodThing: {
+                    message: "That's wonderful! I'd love to hear about it. Celebrating positive moments is so important.",
+                     replies: []
+                },
+                 exploreFeelings: {
+                    message: "Okay. Remember to be gentle with yourself. If you'd like, you could try writing about it in your journal. It's a great tool for understanding your thoughts.",
+                    replies: [{ text: "Thanks, I'll try that.", action: () => handleFlow('endChat') }]
+                },
+                 distraction: {
+                    message: "Of course. How about a quick 2-minute breathing exercise to help calm your mind? It can make a big difference.",
+                    replies: [{ text: "Okay, let's do it.", action: () => handleFlow('endChat') }, { text: "Not right now.", action: () => handleFlow('endChat') }]
+                },
+                endChat: {
+                    message: "Thanks for talking with me. Remember, I'm always here if you need to chat again.",
+                    replies: []
+                }
+            };
+            
+            const handleFlow = (key) => {
+                const step = chatFlow[key];
+                addMessage(step.message, 'ai');
+                if (step.replies.length > 0) {
+                    showQuickReplies(step.replies);
+                }
+            };
+
+            const startChat = () => {
+                chatMessagesContainer.innerHTML = '';
+                setTimeout(() => handleFlow('start'), 500);
+            };
+
+            // --- Journal Logic ---
+            const journalEntryMode = document.getElementById('journal-entry-mode');
+            const journalAnalysisMode = document.getElementById('journal-analysis-mode');
+            const saveBtn = document.getElementById('save-journal-btn');
+            const moodBtns = document.querySelectorAll('.mood-btn');
+            const newEntryBtn = document.getElementById('new-entry-btn');
+            const analysisContent = document.getElementById('analysis-content');
+            
+            let selectedMood = null;
+
+            const checkJournalForm = () => {
+                saveBtn.disabled = !selectedMood;
+            };
+            checkJournalForm();
+
+            moodBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    moodBtns.forEach(b => b.classList.remove('bg-indigo-100', 'ring-2', 'ring-indigo-400'));
+                    btn.classList.add('bg-indigo-100', 'ring-2', 'ring-indigo-400');
+                    selectedMood = btn.dataset.mood;
+                    checkJournalForm();
+                });
+            });
+
+            saveBtn.addEventListener('click', () => {
+                journalEntryMode.classList.add('hidden');
+                journalAnalysisMode.classList.remove('hidden');
+                
+                const analysisData = {
+                    Happy: {
+                        title: "It's great you're feeling happy!",
+                        message: "Acknowledging happy moments helps build resilience. Maybe you could write down one specific thing that made you smile today.",
+                        suggestion: "Consider sharing this positive energy in the 'Celebrating Small Wins' peer room."
+                    },
+                    Okay: {
+                        title: "Feeling 'okay' is perfectly valid.",
+                        message: "It seems like a neutral day. Sometimes these are the best times for gentle reflection. What's one thing you could do to make your evening a little more comfortable?",
+                        suggestion: "A short, calming audio track might be nice. Check out the 'Listen' tool on the home screen."
+                    },
+                    Sad: {
+                        title: "It's brave to acknowledge sadness.",
+                        message: "Thank you for trusting this space with your feelings. Remember that this feeling will pass. You wrote about feeling overwhelmed.",
+                        suggestion: "We noticed you mentioned 'stress'. The 'Navigating School Stress' peer room could be a place to find others with similar experiences."
+                    },
+                    Anxious: {
+                        title: "Anxiety can feel very overwhelming.",
+                        message: "It sounds like your mind is racing right now. Taking a moment to focus on your breath can help anchor you in the present.",
+                        suggestion: "Try the 'Grounding' quick tool. Focusing on your senses can provide immediate relief from anxious thoughts."
+                    },
+                    Angry: {
+                        title: "Anger is a powerful emotion.",
+                        message: "It's a signal that something might be wrong or unfair. It's healthy to acknowledge it instead of bottling it up.",
+                        suggestion: "Channeling this energy can be helpful. Maybe try some physical activity or listening to powerful music."
+                    }
+                };
+
+                const result = analysisData[selectedMood] || analysisData['Okay'];
+
+                analysisContent.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-5xl">${btn.textContent}</p>
+                        <h3 class="text-lg font-semibold mt-2 text-slate-800">${result.title}</h3>
+                        <p class="text-slate-600 mt-1">${result.message}</p>
+                    </div>
+                    <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                        <h4 class="font-semibold text-indigo-800 text-sm flex items-center gap-2"><i data-lucide="lightbulb"></i> Suggestion</h4>
+                        <p class="text-sm text-indigo-700 mt-1">${result.suggestion}</p>
+                    </div>
+                `;
+                lucide.createIcons();
+            });
+
+            newEntryBtn.addEventListener('click', () => {
+                journalAnalysisMode.classList.add('hidden');
+                journalEntryMode.classList.remove('hidden');
+                document.getElementById('journal-text').value = '';
+                selectedMood = null;
+                moodBtns.forEach(b => b.classList.remove('bg-indigo-100', 'ring-2', 'ring-indigo-400'));
+                checkJournalForm();
+            });
+
+            // Set initial screen
+            switchScreen('home-screen');
+        });
+    </script>
+</body>
+</html>
